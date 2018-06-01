@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="company_items">
+        <item>北京分公司</item>
+        <item>天津分公司</item>
+        <item>上海分公司</item>
+        <item>广州分公司</item>
+        <item>台州分公司</item>
+        <item>常州分公司</item>
+        <item>滨海新区分公司</item>
+    </string-array>
+
+    <string-array name="last_name">
+        <item>赵</item>
+        <item>钱</item>
+        <item>孙</item>
+        <item>李</item>
+        <item>周</item>
+        <item>吴</item>
+        <item>郑</item>
+        <item>王</item>
+        <item>冯</item>
+        <item>陈</item>
+        <item>褚</item>
+        <item>卫</item>
+        <item>蒋</item>
+        <item>沈</item>
+        <item>韩</item>
+        <item>杨</item>
+        <item>张</item>
+        <item>刘</item>
+    </string-array>
+
+    <string-array name="first_name">
+        <item>的</item>
+        <item>发</item>
+        <item>啊</item>
+        <item>在</item>
+        <item>先</item>
+        <item>才</item>
+        <item>吧</item>
+        <item>能</item>
+        <item>名</item>
+        <item>上</item>
+        <item>改</item>
+        <item>好</item>
+        <item>嘉</item>
+        <item>开</item>
+        <item>来</item>
+        <item>强</item>
+        <item>五</item>
+        <item>派</item>
+        <item>人</item>
+        <item>图</item>
+        <item>有</item>
+        <item>噢</item>
+        <item>平</item>
+        <item>和</item>
+        <item>花</item>
+        <item>红</item>
+        <item>海</item>
+    </string-array>
+
+    <string-array name="phone_prefix">
+        <item>139</item>
+        <item>138</item>
+        <item>137</item>
+        <item>136</item>
+        <item>135</item>
+        <item>133</item>
+        <item>132</item>
+        <item>131</item>
+        <item>130</item>
+        <item>151</item>
+        <item>152</item>
+        <item>153</item>
+        <item>155</item>
+        <item>156</item>
+        <item>157</item>
+        <item>158</item>
+        <item>159</item>
+        <item>183</item>
+        <item>185</item>
+        <item>186</item>
+        <item>187</item>
+        <item>188</item>
+        <item>189</item>
+    </string-array>
+</resources>
