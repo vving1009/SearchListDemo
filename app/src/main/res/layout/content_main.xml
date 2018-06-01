@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,6 +9,7 @@
     tools:showIn="@layout/activity_main">
 
     <LinearLayout
+        android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="50dp">
 
@@ -47,22 +48,41 @@
             android:textSize="14sp" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/ok_btn"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/ok_button_bg"
+        android:gravity="center"
+        android:text="确 定"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/search_bar"
+        android:layout_above="@id/ok_btn"
         android:orientation="horizontal">
+        <!--android:splitMotionEvents="false"-->
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/company_list"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/person_list"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
     </LinearLayout>
-</LinearLayout>
+
+
+</RelativeLayout>

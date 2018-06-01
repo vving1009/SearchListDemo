@@ -58,7 +58,7 @@ public class DBWrapper {
 
     public List<SalePerson> queryAllPerson() {
         List<SalePerson> salePersons = new ArrayList<>();
-        Cursor cursor = db.rawQuery("select * from salesperson order by company asc", null);
+        Cursor cursor = db.rawQuery("select * from salesperson order by company,name asc", null);
         while (cursor.moveToNext()) {
             SalePerson sp = new SalePerson();
             sp.setCompany(cursor.getString(cursor.getColumnIndexOrThrow("company")));
@@ -72,7 +72,8 @@ public class DBWrapper {
 
     public List<SalePerson> queryPerson(String column, String value) {
         List<SalePerson> salePersons = new ArrayList<>();
-        Cursor cursor = db.rawQuery("select * from salesperson where " + column + "=?" + "order by name asc", new String[]{value});
+        Cursor cursor = db.rawQuery("select * from salesperson where " + column + " like ?" +
+                "order by name asc", new String[]{"%" + value + "%"});
         while (cursor.moveToNext()) {
             SalePerson sp = new SalePerson();
             sp.setCompany(cursor.getString(cursor.getColumnIndexOrThrow("company")));

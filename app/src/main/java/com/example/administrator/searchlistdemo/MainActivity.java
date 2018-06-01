@@ -14,6 +14,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -156,7 +157,111 @@ public class MainActivity extends AppCompatActivity {
         mPersonList.setLayoutManager(new LinearLayoutManager(this));
         mCompanyList.setAdapter(mCompanyListAdapter);
         mPersonList.setAdapter(mPersonListAdapter);
+        /*mCompanyList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+
+            private int mLastY;
+
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull final RecyclerView rv, @NonNull final
+            MotionEvent e) {
+                Log.d("debug", "LEFT: onInterceptTouchEvent");
+
+                final Boolean ret = rv.getScrollState() != RecyclerView.SCROLL_STATE_IDLE;
+                if (!ret) {
+                    onTouchEvent(rv, e);
+                }
+                return Boolean.FALSE;
+            }
+
+            @Override
+            public void onTouchEvent(@NonNull final RecyclerView rv, @NonNull final MotionEvent e) {
+                Log.d("debug", "LEFT: onTouchEvent");
+
+                final int action;
+                if ((action = e.getAction()) == MotionEvent.ACTION_DOWN && mPersonList
+                        .getScrollState() == RecyclerView.SCROLL_STATE_IDLE) {
+                    mLastY = rv.getScrollY();
+                    rv.addOnScrollListener(mLeftOSL);
+                }
+                else {
+                    if (action == MotionEvent.ACTION_UP && rv.getScrollY() == mLastY) {
+                        rv.removeOnScrollListener(mLeftOSL);
+                    }
+                }
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(final boolean disallowIntercept) {
+                Log.d("debug", "LEFT: onRequestDisallowInterceptTouchEvent");
+            }
+        });
+        mPersonList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+
+            private int mLastY;
+
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull final RecyclerView rv, @NonNull final
+            MotionEvent e) {
+                Log.d("debug", "RIGHT: onInterceptTouchEvent");
+
+                final Boolean ret = rv.getScrollState() != RecyclerView.SCROLL_STATE_IDLE;
+                if (!ret) {
+                    onTouchEvent(rv, e);
+                }
+                return Boolean.FALSE;
+            }
+
+            @Override
+            public void onTouchEvent(@NonNull final RecyclerView rv, @NonNull final MotionEvent e) {
+                Log.d("debug", "RIGHT: onTouchEvent");
+
+                final int action;
+                if ((action = e.getAction()) == MotionEvent.ACTION_DOWN && mCompanyList
+                        .getScrollState
+                                () == RecyclerView.SCROLL_STATE_IDLE) {
+                    mLastY = rv.getScrollY();
+                    rv.addOnScrollListener(mRightOSL);
+                }
+                else {
+                    if (action == MotionEvent.ACTION_UP && rv.getScrollY() == mLastY) {
+                        rv.removeOnScrollListener(mRightOSL);
+                    }
+                }
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(final boolean disallowIntercept) {
+                Log.d("debug", "RIGHT: onRequestDisallowInterceptTouchEvent");
+            }
+        });*/
     }
+
+
+    /*private final RecyclerView.OnScrollListener mLeftOSL = new SelfRemovingOnScrollListener() {
+        @Override
+        public void onScrolled(@NonNull final RecyclerView recyclerView, final int dx, final int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            mCompanyList.scrollBy(dx, dy);
+        }
+    }, mRightOSL = new SelfRemovingOnScrollListener() {
+
+        @Override
+        public void onScrolled(@NonNull final RecyclerView recyclerView, final int dx, final int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            mPersonList.scrollBy(dx, dy);
+        }
+    };
+
+    public class SelfRemovingOnScrollListener extends RecyclerView.OnScrollListener {
+
+        @Override
+        public final void onScrollStateChanged(@NonNull final RecyclerView recyclerView, final int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                recyclerView.removeOnScrollListener(this);
+            }
+        }
+    }*/
 
     private class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 

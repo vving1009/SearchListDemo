@@ -1,8 +1,11 @@
 package com.example.administrator.searchlistdemo.persistence;
 
 public class SalePerson {
+
     private String company;
+
     private String name;
+
     private String phone;
 
     public String getCompany() {
