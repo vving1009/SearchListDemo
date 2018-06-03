@@ -13,13 +13,13 @@ import java.util.Random;
 public class DBWrapper {
 
     private static DBWrapper INSTANCE;
-    Context mContext;
-    DbHelper dbHelper;
-    SQLiteDatabase db;
-    String[] companys;
-    String[] firstNames;
-    String[] lastNames;
-    String[] phonePrefixs;
+    private Context mContext;
+    private DbHelper dbHelper;
+    private SQLiteDatabase db;
+    private String[] companys;
+    private String[] firstNames;
+    private String[] lastNames;
+    private String[] phonePrefixs;
 
     public synchronized static DBWrapper getInstance(Context context) {
         if (INSTANCE == null) {

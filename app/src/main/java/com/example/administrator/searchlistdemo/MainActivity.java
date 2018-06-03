@@ -17,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView mPersonList;
     ListAdapter mCompanyListAdapter, mPersonListAdapter;
     List<SalePerson> mSalePersons;
-    boolean listChanged;
+    boolean listChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +61,15 @@ public class MainActivity extends AppCompatActivity {
         mSearchView = findViewById(R.id.search_view);
         mCompanyList = findViewById(R.id.company_list);
         mPersonList = findViewById(R.id.person_list);
-        initSearchView();
+        findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         initList();
+        initSearchView();
     }
 
     private void initSearchView() {
@@ -146,6 +155,9 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        mSearchView.onActionViewExpanded();
+        mSearchView.setIconified(true);
+        mSearchView.clearFocus();
     }
 
     private void initList() {

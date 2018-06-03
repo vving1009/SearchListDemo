@@ -34,8 +34,9 @@
             android:layout_gravity="center"
             android:layout_weight="70"
             android:background="@drawable/search_view_bg"
-            app:defaultQueryHint="请输入分公司名、姓名、手机号"
-            app:iconifiedByDefault="true" />
+            app:queryHint="请输入分公司名、姓名、手机号"
+            app:iconifiedByDefault="false"
+            app:searchIcon="@null"/>
 
         <Button
             android:id="@+id/search_btn"
