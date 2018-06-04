@@ -39,7 +39,7 @@ public class DbContract {
         public static final String TABLE_NAME = "user";
         /*登录或注册成功后存入数据库*/
         public static final String COLUMN_NAME_TOKEN = "token";
-        public static final String COLUMN_NAME_PHONE = "phone";
+        public static final String COLUMN_WORK_ID = "phone";
         /*查询我的信息后存入数据库*/
         public static final String COLUMN_NAME_APPROVE_NUMBER = "approve_number";
         public static final String COLUMN_NAME_PROGRESS_NUMBER = "progress_number";
@@ -61,12 +61,12 @@ public class DbContract {
     /**
      * company 分公司名
      * name 客户经理名
-     * phone 手机号
+     * work_id 工号
      */
-    public static abstract class Salesperson implements BaseColumns {
-        public static final String TABLE_NAME = "salesperson";
-        public static final String COLUMN_NAME_COMPANY = "company";
-        public static final String COLUMN_NAME_NAME = "name";
-        public static final String COLUMN_NAME_PHONE = "phone";
+    public static abstract class Salesman implements BaseColumns {
+        public static final String TABLE_NAME = "salesman";
+        public static final String COLUMN_COMPANY = "company";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_WORK_ID = "work_id";
     }
 }

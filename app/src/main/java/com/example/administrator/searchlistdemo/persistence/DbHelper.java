@@ -30,7 +30,7 @@ public class DbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + DbContract.User.TABLE_NAME + " (" +
                     DbContract.User._ID + INTEGER_TYPE + " PRIMARY KEY," +
                     DbContract.User.COLUMN_NAME_TOKEN + TEXT_TYPE + COMMA_SEP +
-                    DbContract.User.COLUMN_NAME_PHONE + TEXT_TYPE + COMMA_SEP +
+                    DbContract.User.COLUMN_WORK_ID + TEXT_TYPE + COMMA_SEP +
                     DbContract.User.COLUMN_NAME_APPROVE_NUMBER + INTEGER_TYPE + COMMA_SEP +
                     DbContract.User.COLUMN_NAME_PROGRESS_NUMBER + INTEGER_TYPE + COMMA_SEP +
                     DbContract.User.COLUMN_NAME_HISTORY_NUMBER + INTEGER_TYPE + COMMA_SEP +
@@ -47,11 +47,11 @@ public class DbHelper extends SQLiteOpenHelper {
                     " )";
 
     private static final String SQL_CREATE_SALES =
-            "CREATE TABLE " + DbContract.Salesperson.TABLE_NAME + " (" +
-                    DbContract.Salesperson._ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
-                    DbContract.Salesperson.COLUMN_NAME_COMPANY + TEXT_TYPE + COMMA_SEP +
-                    DbContract.Salesperson.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
-                    DbContract.Salesperson.COLUMN_NAME_PHONE + TEXT_TYPE + " )";
+            "CREATE TABLE " + DbContract.Salesman.TABLE_NAME + " (" +
+                    DbContract.Salesman._ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
+                    DbContract.Salesman.COLUMN_COMPANY + TEXT_TYPE + COMMA_SEP +
+                    DbContract.Salesman.COLUMN_NAME + TEXT_TYPE + COMMA_SEP +
+                    DbContract.Salesman.COLUMN_WORK_ID + TEXT_TYPE + " )";
 
     public DbHelper(Context context) {
         super(context.getApplicationContext(), DATABASE_NAME, null, 1);

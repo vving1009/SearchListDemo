@@ -1,12 +1,20 @@
 package com.example.administrator.searchlistdemo.persistence;
 
-public class SalePerson {
+public class Salesman {
 
     private String company;
 
     private String name;
 
-    private String phone;
+    private String workId;
+
+    public String getWorkId() {
+        return workId;
+    }
+
+    public void setWorkId(String workId) {
+        this.workId = workId;
+    }
 
     public String getCompany() {
         return company;
@@ -22,13 +30,5 @@ public class SalePerson {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 }

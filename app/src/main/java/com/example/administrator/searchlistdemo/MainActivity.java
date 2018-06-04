@@ -14,32 +14,27 @@ import android.text.style.AbsoluteSizeSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.administrator.searchlistdemo.persistence.DBWrapper;
 import com.example.administrator.searchlistdemo.persistence.DbContract;
-import com.example.administrator.searchlistdemo.persistence.SalePerson;
+import com.example.administrator.searchlistdemo.persistence.Salesman;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private final int COMPANY_ADAPTER = 101;
-    private final int PERSON_ADAPTER = 102;
     SearchView mSearchView;
     DBWrapper mDbWrapper;
     RecyclerView mCompanyList;
     RecyclerView mPersonList;
-    ListAdapter mCompanyListAdapter, mPersonListAdapter;
-    List<SalePerson> mSalePersons;
+    CompanyListAdapter mCompanyListAdapter;
+    PersonListAdapter mPersonListAdapter;
     boolean listChanged = false;
 
     @Override
@@ -70,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         initList();
         initSearchView();
+        mCompanyList.requestFocus();
     }
 
     private void initSearchView() {
@@ -103,68 +99,46 @@ public class MainActivity extends AppCompatActivity {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.d(TAG, "onQueryTextSubmit: ");
-                List<SalePerson> list;
-                if ((list = mDbWrapper.queryPerson(DbContract.Salesperson.COLUMN_NAME_COMPANY, query)) != null && list.size() != 0) {
-                    mCompanyListAdapter.notifyListChange(list);
-                    mPersonListAdapter.notifyListChange(list);
-                    listChanged = true;
-                    return true;
-                } else if ((list = mDbWrapper.queryPerson(DbContract.Salesperson.COLUMN_NAME_NAME, query)) != null && list.size() != 0) {
-                    mCompanyListAdapter.notifyListChange(list);
-                    mPersonListAdapter.notifyListChange(list);
-                    listChanged = true;
-                    return true;
-                } else if ((list = mDbWrapper.queryPerson(DbContract.Salesperson.COLUMN_NAME_PHONE, query)) != null && list.size() != 0) {
-                    mCompanyListAdapter.notifyListChange(list);
-                    mPersonListAdapter.notifyListChange(list);
-                    listChanged = true;
-                    return true;
-                } else if ((list = mDbWrapper.queryAllPerson()) != null && list.size() != 0) {
-                    mCompanyListAdapter.notifyListChange(list);
-                    mPersonListAdapter.notifyListChange(list);
-                    return true;
-                }
-                return false;
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.d(TAG, "onQueryTextChange: ");
-                List<SalePerson> list;
-                if ((list = mDbWrapper.queryPerson(DbContract.Salesperson.COLUMN_NAME_COMPANY, newText)) != null && list.size() != 0) {
-                    mCompanyListAdapter.notifyListChange(list);
+                List<Salesman> list;
+                if (newText.equals("")) {
+                    initListAdapter();
+                    return true;
+                }
+                mPersonListAdapter.setBlankContent();
+                if ((list = mDbWrapper.queryPerson(DbContract.Salesman.COLUMN_COMPANY, newText)) != null && list.size() != 0) {
+                    mCompanyListAdapter.setItemSelected(list.get(0).getCompany());
                     mPersonListAdapter.notifyListChange(list);
                     listChanged = true;
                     return true;
-                } else if ((list = mDbWrapper.queryPerson(DbContract.Salesperson.COLUMN_NAME_NAME, newText)) != null && list.size() != 0) {
-                    mCompanyListAdapter.notifyListChange(list);
+                } else if ((list = mDbWrapper.queryPerson(DbContract.Salesman.COLUMN_NAME, newText)) != null && list.size() != 0) {
+                    mCompanyListAdapter.setNoneSelected();
                     mPersonListAdapter.notifyListChange(list);
                     listChanged = true;
                     return true;
-                } else if ((list = mDbWrapper.queryPerson(DbContract.Salesperson.COLUMN_NAME_PHONE, newText)) != null && list.size() != 0) {
-                    mCompanyListAdapter.notifyListChange(list);
+                } else if ((list = mDbWrapper.queryPerson(DbContract.Salesman.COLUMN_WORK_ID, newText)) != null && list.size() != 0) {
+                    mCompanyListAdapter.setNoneSelected();
                     mPersonListAdapter.notifyListChange(list);
                     listChanged = true;
                     return true;
-                } else if ((list = mDbWrapper.queryAllPerson()) != null && list.size() != 0) {
-                    mCompanyListAdapter.notifyListChange(list);
-                    mPersonListAdapter.notifyListChange(list);
-                    return true;
+                } else {
+                    initListAdapter();
                 }
                 return false;
             }
         });
+        //动态显示删除✖键
         mSearchView.onActionViewExpanded();
         mSearchView.setIconified(true);
-        mSearchView.clearFocus();
     }
 
     private void initList() {
-        Log.d(TAG, "initList: ");
-        mSalePersons = mDbWrapper.queryAllPerson();
-        mCompanyListAdapter = new ListAdapter(mSalePersons, COMPANY_ADAPTER);
-        mPersonListAdapter = new ListAdapter(mSalePersons, PERSON_ADAPTER);
+        mCompanyListAdapter = new CompanyListAdapter(mDbWrapper.queryCompany());
+        mPersonListAdapter = new PersonListAdapter(new ArrayList<Salesman>());
         mCompanyList.setLayoutManager(new LinearLayoutManager(this));
         mPersonList.setLayoutManager(new LinearLayoutManager(this));
         mCompanyList.setAdapter(mCompanyListAdapter);
@@ -275,90 +249,157 @@ public class MainActivity extends AppCompatActivity {
         }
     }*/
 
-    private class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+    private void initListAdapter() {
+        mCompanyListAdapter.setNoneSelected();
+        mPersonListAdapter.setBlankContent();
+        listChanged = false;
+    }
 
-        private List<SalePerson> salePersons;
-        private int mode;
+    private class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.ViewHolder> {
 
-        ListAdapter(List<SalePerson> persons, int mode) {
-            this.mode = mode;
-            salePersons = persons;
+        private List<String> companys;
+
+        private int selectPos = -1;
+
+        CompanyListAdapter(List<String> companys) {
+            this.companys = companys;
         }
 
         @NonNull
         @Override
-        public ListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            Log.d(TAG, "onCreateViewHolder: " + mode);
-            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.list_item, parent, false);
+        public CompanyListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.salescompany_list_item, parent, false);
             return new ViewHolder(view);
         }
 
         @SuppressLint("SetTextI18n")
         @Override
-        public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, final int position) {
-            Log.d(TAG, "onBindViewHolder: " + mode);
-            switch (mode) {
-                case COMPANY_ADAPTER:
-                    holder.text.setText(salePersons.get(position).getCompany());
-                    holder.item.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            listChanged = true;
-                            List<SalePerson> list = mDbWrapper.queryPerson(DbContract.Salesperson.COLUMN_NAME_COMPANY, salePersons.get(position).getCompany());
-                            notifyListChange(list);
-                            mPersonListAdapter.notifyListChange(list);
-                        }
-                    });
-                    break;
-                case PERSON_ADAPTER:
-                    holder.text.setText(salePersons.get(position).getName() + "(" + salePersons.get(position).getPhone() + ")");
-                    holder.item.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            listChanged = true;
-                            List<SalePerson> list = mDbWrapper.queryPerson(DbContract.Salesperson.COLUMN_NAME_NAME, salePersons.get(position).getName());
-                            notifyListChange(list);
-                            mCompanyListAdapter.notifyListChange(list);
-                        }
-                    });
-                    break;
+        public void onBindViewHolder(@NonNull CompanyListAdapter.ViewHolder holder, final int position) {
+            holder.text.setText(companys.get(position));
+            if (position == selectPos) {
+                holder.rootView.setBackgroundColor(getColor(android.R.color.white));
+            } else {
+                holder.rootView.setBackgroundColor(getColor(R.color.list_item_bg));
             }
-
+            holder.rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectPos = position;
+                    notifyDataSetChanged();
+                    List<Salesman> list = mDbWrapper.queryPerson(DbContract.Salesman.COLUMN_COMPANY, companys.get(position));
+                    mPersonListAdapter.notifyListChange(list);
+                    listChanged = true;
+                }
+            });
         }
 
         @Override
         public int getItemCount() {
-            return salePersons.size();
+            return companys.size();
         }
 
-        void notifyListChange(List<SalePerson> list) {
-            salePersons = list;
+        public void setItemSelected(String company) {
+            selectPos = companys.indexOf(company);
+            notifyDataSetChanged();
+        }
+
+        public void setNoneSelected() {
+            selectPos = -1;
             notifyDataSetChanged();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
             TextView text;
-            ImageView image;
-            View item;
+            View rootView;
 
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
                 text = itemView.findViewById(R.id.text);
-                image = itemView.findViewById(R.id.image);
-                item = itemView.findViewById(R.id.item);
+                rootView = itemView.findViewById(R.id.root_view);
+            }
+        }
+    }
+
+    private class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.ViewHolder> {
+
+        private List<Salesman> salesmen;
+
+        private int selectPos = -1;
+
+        PersonListAdapter(List<Salesman> persons) {
+            salesmen = persons;
+        }
+
+        @NonNull
+        @Override
+        public PersonListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.salesman_list_item, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @SuppressLint("SetTextI18n")
+        @Override
+        public void onBindViewHolder(@NonNull PersonListAdapter.ViewHolder holder, final int position) {
+            holder.name.setText(salesmen.get(position).getName());
+            holder.phone.setText(salesmen.get(position).getWorkId());
+            if (position == selectPos) {
+                holder.name.setTextColor(getColor(R.color.list_text_selected));
+                holder.phone.setTextColor(getColor(R.color.list_text_selected));
+            } else {
+                holder.name.setTextColor(getColor(R.color.list_text));
+                holder.phone.setTextColor(getColor(R.color.list_text));
+            }
+            holder.rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectPos = position;
+                    notifyDataSetChanged();
+                    listChanged = true;
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return salesmen.size();
+        }
+
+        public void notifyListChange(List<Salesman> list) {
+            Log.d(TAG, "PersonListAdapter notifyListChange: ");
+            salesmen = list;
+            notifyDataSetChanged();
+        }
+
+        public void setBlankContent() {
+            selectPos = -1;
+            salesmen.clear();
+            notifyDataSetChanged();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            TextView id;
+            TextView name;
+            TextView phone;
+            View rootView;
+
+            ViewHolder(View itemView) {
+                super(itemView);
+                id = itemView.findViewById(R.id.id);
+                name = itemView.findViewById(R.id.name);
+                phone = itemView.findViewById(R.id.phone);
+                rootView = itemView.findViewById(R.id.root_view);
             }
         }
 
     }
 
+
     @Override
     public void onBackPressed() {
         if (listChanged) {
-            List<SalePerson> list = mDbWrapper.queryAllPerson();
-            mCompanyListAdapter.notifyListChange(list);
-            mPersonListAdapter.notifyListChange(list);
-            listChanged = false;
+            initListAdapter();
         } else {
             super.onBackPressed();
         }
